@@ -208,10 +208,10 @@ function App() {
             Latest News
           </Typography>
           <Grid container spacing={3}>
-            {articles.map(item => {
+            {articles.map((item) => {
               if (item.title.toLowerCase().includes(text.toLowerCase())) {
                 return (
-                  <Grid item xs={12} sm={6} md={4}>
+                  <Grid item xs={12} sm={6} md={4} key={articles.indexOf(item)}>
                     <Card className={classes.card}>
                       <CardActionArea>
                         <CardMedia
@@ -239,6 +239,8 @@ function App() {
                     </Card>
                   </Grid>
                 )
+              } else {
+                return null;
               }
             })}
           </Grid>
