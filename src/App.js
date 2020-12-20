@@ -116,7 +116,7 @@ function App() {
   const [text, setText] = useState('')
 
   useEffect(() => {
-    Axios.get(`http://newsapi.org/v2/top-headlines?country=in&category=${category}&apiKey=b4592102540d431295eded083a5d7c9a`)
+    Axios.get(`https://cors-anywhere.herokuapp.com/http://newsapi.org/v2/top-headlines?country=in&category=${category}&apiKey=b4592102540d431295eded083a5d7c9a`)
       .then(res => {
         setArticles(res.data.articles)
       }).catch(err => {
