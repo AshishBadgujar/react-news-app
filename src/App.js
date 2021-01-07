@@ -23,7 +23,6 @@ import {
   createMuiTheme,
   Button
 } from '@material-ui/core';
-import { BookmarkBorder } from '@material-ui/icons';
 import SearchIcon from '@material-ui/icons/Search';
 
 const useStyles = makeStyles((theme) => ({
@@ -95,7 +94,6 @@ const useStyles = makeStyles((theme) => ({
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create('width'),
     width: '100%',
@@ -111,18 +109,20 @@ const useStyles = makeStyles((theme) => ({
 function App() {
   const [darkMode, setDarkMode] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
-  const [category, setCategory] = useState('general')
+  const [category, setCategory] = useState('articles')
   const [articles, setArticles] = useState([])
   const [text, setText] = useState('')
 
   useEffect(() => {
-    Axios.get(`https://cors-anywhere.herokuapp.com/http://newsapi.org/v2/top-headlines?country=in&category=${category}&apiKey=b4592102540d431295eded083a5d7c9a`)
-      .then(res => {
-        setArticles(res.data.articles)
-      }).catch(err => {
-        console.log(err)
-      })
+    getData()
   }, [category])
+
+  const getData = async () => {
+    let res = await Axios.get(`https://spaceflightnewsapi.net/api/v2/${category}`)
+    let res2 = res.data
+    console.log(res2)
+    setArticles(res2)
+  }
 
   const theme = createMuiTheme({
     palette: {
@@ -138,12 +138,9 @@ function App() {
       <Paper>
         <AppBar position="static" color="primary" >
           <Toolbar className={classes.appbar}>
-            <Typography variant="h4" onClick={() => setCategory("general")}>
-              News
-          </Typography>
-            <Button aria-controls="simple-menu" aria-haspopup="true" onClick={(e) => setAnchorEl(e.currentTarget)}>
-              {category}
-            </Button>
+            <Typography variant="h4" onClick={(e) => setAnchorEl(e.currentTarget)}>
+              React-{category}
+            </Typography>
             <Menu
               id="simple-menu"
               anchorEl={anchorEl}
@@ -152,30 +149,17 @@ function App() {
               onClose={() => setAnchorEl(null)}
             >
               <MenuItem onClick={() => {
-                setCategory("business")
+                setCategory("articles")
                 setAnchorEl(null)
-              }}>business</MenuItem>
+              }}>Articles</MenuItem>
               <MenuItem onClick={() => {
-                setCategory("entertainment")
+                setCategory("blogs")
                 setAnchorEl(null)
-              }}>entertainment</MenuItem>
+              }}>Blogs</MenuItem>
               <MenuItem onClick={() => {
-                setCategory("technology")
+                setCategory("reports")
                 setAnchorEl(null)
-              }}>technology</MenuItem>
-              <MenuItem onClick={() => {
-                setCategory("science")
-                setAnchorEl(null)
-              }}>science</MenuItem>
-              <MenuItem onClick={() => {
-                setCategory("health")
-                setAnchorEl(null)
-              }}>health</MenuItem>
-              <MenuItem onClick={() => {
-                setCategory("sports")
-                setAnchorEl(null)
-              }}>sports</MenuItem>
-
+              }}>Reports</MenuItem>
             </Menu>
             <div className={classes.search}>
               <div className={classes.searchIcon}>
@@ -205,36 +189,38 @@ function App() {
         </Box>
         <Container maxWidth="lg" className={classes.newsContainer}>
           <Typography variant="h4" className={classes.newsTitle}>
-            Latest News
+            Latest
           </Typography>
           <Grid container spacing={3}>
             {articles.map((item) => {
               if (item.title.toLowerCase().includes(text.toLowerCase())) {
                 return (
-                  <Grid item xs={12} sm={6} md={4} key={articles.indexOf(item)}>
+                  <Grid item xs={12} sm={6} md={4} key={item.id}>
                     <Card className={classes.card}>
                       <CardActionArea>
                         <CardMedia
                           className={classes.media}
-                          image={item.urlToImage}
+                          image={item.imageUrl}
                           title="IT"
                         />
                         <CardContent>
                           <Typography gutterBottom variant="h5" component="h2">
-                            <Link href={item.url} color="inherit">
+                            <Link href={item.url} target="_blank" color="inherit">
                               {item.title}
                             </Link>
                           </Typography>
                           <Typography variant="body2" color="textSecondary" component="p">
-                            {item.description}
+                            {item.summary}
                           </Typography>
                         </CardContent>
                       </CardActionArea>
                       <CardActions className={classes.cardActions}>
                         <Typography variant="subtitle2" color="textSecondary" component="p">
-                          {moment(item.publishedAt).fromNow()}
+                          {item.newsSite}
                         </Typography>
-                        <BookmarkBorder />
+                        <Typography variant="subtitle2" color="textSecondary" component="p">
+                          {moment(item.updatedAt).fromNow()}
+                        </Typography>
                       </CardActions>
                     </Card>
                   </Grid>
