@@ -187,7 +187,7 @@ function App() {
         </AppBar>
         <Box className={classes.hero}>
           <Box>
-            The World in Headlines !
+            World in Headlines
          </Box>
         </Box>
         <Container maxWidth="lg" className={classes.newsContainer}>
