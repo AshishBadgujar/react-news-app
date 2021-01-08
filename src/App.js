@@ -113,13 +113,12 @@ function App() {
   const [text, setText] = useState('')
 
   useEffect(() => {
-    getData()
+    getData();
   }, [category])
 
   const getData = async () => {
     let res = await Axios.get(`https://spaceflightnewsapi.net/api/v2/${category}`)
     let res2 = res.data
-    console.log(res2)
     setArticles(res2)
   }
 
