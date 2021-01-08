@@ -21,7 +21,6 @@ import {
   MenuItem,
   Link,
   createMuiTheme,
-  Button
 } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 
