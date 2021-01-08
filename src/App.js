@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     fontSize: "2rem",
     [theme.breakpoints.down("sm")]: {
-      fontSize: "1.3rem"
+      fontSize: "1.2rem"
     }
   },
   appbar: {
