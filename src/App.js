@@ -25,6 +25,12 @@ import {
 import SearchIcon from '@material-ui/icons/Search';
 
 const useStyles = makeStyles((theme) => ({
+  title: {
+    fontSize: "2rem",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "1.3rem"
+    }
+  },
   appbar: {
     display: "flex",
     justifyContent: "space-between"
@@ -43,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "4rem",
     [theme.breakpoints.down("sm")]: {
       height: 300,
-      fontSize: "3rem"
+      fontSize: "2rem"
     }
   },
   newsContainer: {
@@ -135,8 +141,8 @@ function App() {
       <Paper>
         <AppBar position="static" color="primary" >
           <Toolbar className={classes.appbar}>
-            <Typography variant="h4" onClick={(e) => setAnchorEl(e.currentTarget)}>
-              React-{category}
+            <Typography className={classes.title} onClick={(e) => setAnchorEl(e.currentTarget)}>
+              {category}
             </Typography>
             <Menu
               id="simple-menu"
@@ -182,7 +188,7 @@ function App() {
         <Box className={classes.hero}>
           <Box>
             The World in Headlines !
-        </Box>
+         </Box>
         </Box>
         <Container maxWidth="lg" className={classes.newsContainer}>
           <Typography variant="h4" className={classes.newsTitle}>
