@@ -18,11 +18,11 @@ export default function swDev(){
    
 //   const vapidPublicKey =webpush.generateVAPIDKeys();
 //   const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey.publicKey);
-   
-    let swUrl=`${process.env.PUBLIC_URL}/sw.js`
+   console.log(process.env.PUBLIC_URL,"=this is ")
+    let swUrl=`https://react-news-nine.vercel.app/sw.js`
     navigator.serviceWorker.register(swUrl)
         .then(res=>{
-          return res;
+            console.log("running",res.scope)
             // return res.pushManager.getSubscription()
             //     .then((subscribtion)=>{
             //         return res.pushManager.subscribe({
