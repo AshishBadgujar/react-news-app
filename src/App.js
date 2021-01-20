@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Alert from '@material-ui/lab/Alert';
 import Axios from 'axios';
 import moment from 'moment'
 import { ThemeProvider, makeStyles, fade } from '@material-ui/core/styles'
@@ -116,13 +117,21 @@ function App() {
   const [anchorEl, setAnchorEl] = useState(null)
   const [category, setCategory] = useState('articles')
   const [articles, setArticles] = useState([])
+  const [isOffline,setOffline]=useState(false)
   const [text, setText] = useState('')
 
   useEffect(() => {
-    const getData = async () => {
-      let res = await Axios.get(`https://spaceflightnewsapi.net/api/v2/${category}`)
-      let res2 = res.data
-      setArticles(res2)
+    const getData = () => {
+      Axios.get(`https://spaceflightnewsapi.net/api/v2/${category}`)
+      .then((res)=>{
+        setArticles(res.data)
+        localStorage.setItem(category,JSON.stringify(res.data))
+      })
+      .catch((err)=>{
+        setOffline(true)
+        let dataCollection=localStorage.getItem(category)
+        setArticles(JSON.parse(dataCollection))
+      })
     }
     getData();
   }, [category])
@@ -185,6 +194,7 @@ function App() {
             />
           </Toolbar>
         </AppBar>
+        {isOffline && <Alert severity="warning">You are offline , check your internet connection !</Alert>}
         <Box className={classes.hero}>
           <Box>
             World in Headlines

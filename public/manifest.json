@@ -1,0 +1,13 @@
+{
+    "short-name":"news",
+    "name":"react-news-app",
+    "icons":[
+        {
+            "src":"https://www.codester.com/static/uploads/items/000/007/7376/icon.png",
+            "type":"image/png",
+            "size":"200x200"
+        }
+    ],
+    "start-url":".",
+    "display":"standalone"
+}
