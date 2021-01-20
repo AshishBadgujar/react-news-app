@@ -13,6 +13,7 @@ e.waitUntil(
             "static/js/2.06ea84a3.chunk.js",
             "static/js/main.3685daf0.chunk.js",
             "static/css/main.94a74a70.chunk.css",
+            "static/js/main.5d89a94f.chunk.js",
             "favicon.ico",
             "news1.jpg",
             "index.html",
