@@ -21,14 +21,6 @@ e.waitUntil(
 
 this.addEventListener('fetch',(e)=>{
     if(!navigator.onLine){
-        if (e.request.url===`https://react-news-nine.vercel.app/static/js/main.chunk.js`) {
-            e.waitUntil(
-                this.registration.showNotification("Notify",{
-                    body:"You are offline!",
-                    icon:"https://www.codester.com/static/uploads/items/000/007/7376/icon.png"
-                })
-            )
-        }
         e.respondWith(
             caches.match(e.request)
             .then((res)=>{
