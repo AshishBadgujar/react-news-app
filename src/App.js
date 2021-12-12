@@ -203,8 +203,11 @@ function App() {
             aiSpeak(item.title);
           })
         }
-        if (transcript.toLowerCase().includes('no')) {
+        else if (transcript.toLowerCase().includes('no')) {
           aiSpeak('okay, no problem !');
+        }
+        else {
+          aiSpeak('Give me answer either yes or no !');
         }
       }
     }
