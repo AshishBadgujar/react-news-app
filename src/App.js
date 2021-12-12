@@ -198,12 +198,12 @@ function App() {
       var transcript = e.results[current][0].transcript;
       if (e.results[0].isFinal) {
         setAi(transcript)
-        if (transcript.toLowerCase().includes('yes')) {
+        if (transcript.toLowerCase().includes('yes' || 'yeah' || "sure" || 'why not')) {
           articles.forEach((item) => {
             aiSpeak(item.title);
           })
         }
-        else if (transcript.toLowerCase().includes('no')) {
+        else if (transcript.toLowerCase().includes('no' || 'stop' || 'shut up')) {
           aiSpeak('okay, no problem !');
         }
         else {
