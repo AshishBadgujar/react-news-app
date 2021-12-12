@@ -172,7 +172,7 @@ function App() {
   }
 
   const handleAI = () => {
-    speakRobot("Hi there ! would like to read me all the headlines ?")
+    speakRobot("Hello reader ! would you like to read me all the headlines ?")
     setTimeout(() => {
       aiRecognize();
     }, 5000);
@@ -204,7 +204,7 @@ function App() {
           })
         }
         if (transcript.toLowerCase().includes('no')) {
-          aiSpeak('okay,keep quit.');
+          aiSpeak('okay, no problem !');
         }
       }
     }
