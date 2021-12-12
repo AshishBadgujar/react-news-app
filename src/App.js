@@ -40,9 +40,9 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "space-between",
   },
-  fab:{
+  fab: {
     margin: 0,
-    height:56,
+    height: 56,
     top: 'auto',
     right: 20,
     bottom: 20,
@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
     position: "relative",
-    backgroundAttachment:"fixed",
+    backgroundAttachment: "fixed",
     alignItems: "center",
     color: "#fff",
     fontSize: "4rem",
@@ -93,9 +93,9 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: fade(theme.palette.common.white, 0.25),
     },
     marginLeft: 0,
-    display:"flex",
-    justifyContent:"center",
-    flexDirection:"column",
+    display: "flex",
+    justifyContent: "center",
+    flexDirection: "column",
     width: '100%',
     [theme.breakpoints.up('sm')]: {
       marginLeft: theme.spacing(1),
@@ -129,88 +129,85 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
-  const synth=window.speechSynthesis;
-  const SpeechRecognition=window.webkitSpeechRecognition;
+  const synth = window.speechSynthesis;
+  const SpeechRecognition = window.webkitSpeechRecognition;
   const [darkMode, setDarkMode] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
   const [category, setCategory] = useState('articles')
   const [articles, setArticles] = useState([])
-  const [isOffline,setOffline]=useState(false)
+  const [isOffline, setOffline] = useState(false)
   const [text, setText] = useState('')
-  const [isListening,setListening]=useState(false)
-  const [ai,setAi]=useState('')
-  const [thisCard,setThisCard]=useState('')
+  const [isListening, setListening] = useState(false)
+  const [ai, setAi] = useState('')
 
   useEffect(() => {
     const getData = () => {
-      Axios.get(`https://spaceflightnewsapi.net/api/v2/${category}`)
-      .then((res)=>{
-        setArticles(res.data)
-        localStorage.setItem(category,JSON.stringify(res.data))
-      })
-      .catch((err)=>{
-        setOffline(true)
-        let dataCollection=localStorage.getItem(category)
-        setArticles(JSON.parse(dataCollection))
-      })
+      Axios.get(`https://api.spaceflightnewsapi.net/v3/${category}`)
+        .then(res => {
+          setArticles(res.data)
+          localStorage.setItem(category, JSON.stringify(res.data))
+        }).catch(err => {
+          setOffline(true)
+          let dataCollection = localStorage.getItem(category)
+          setArticles(JSON.parse(dataCollection))
+        })
     }
     getData();
   }, [category])
 
-  const aiSpeak=(textSpeak)=>{
-    let voices=[];
-    voices=synth.getVoices();
-    let toSpeak=new SpeechSynthesisUtterance(textSpeak)
-    toSpeak.voice=voices[1];
-    toSpeak.onend=e=>{
+  const aiSpeak = (textSpeak) => {
+    let voices = [];
+    voices = synth.getVoices();
+    let toSpeak = new SpeechSynthesisUtterance(textSpeak)
+    toSpeak.voice = voices[1];
+    toSpeak.onend = e => {
       console.log("done...")
     }
-    toSpeak.onerror=e=>console.log("Error",e.error)
+    toSpeak.onerror = e => console.log("Error", e.error)
     synth.speak(toSpeak);
-    }
-    const speakRobot=(whatTo)=>{
-      setAi(whatTo);
-      aiSpeak(whatTo);
-    }
-    
-    const handleAI=()=>{
-      speakRobot("Hi there ! would like to read me all the headlines ?")
-      setTimeout(() => {
-        aiRecognize();
-      },5000);
-    }
-  const aiRecognize=()=>{
-    let recognition=new SpeechRecognition();
-    recognition.interimResults=true;
-    recognition.onstart=()=>{
+  }
+  const speakRobot = (whatTo) => {
+    setAi(whatTo);
+    aiSpeak(whatTo);
+  }
+
+  const handleAI = () => {
+    speakRobot("Hi there ! would like to read me all the headlines ?")
+    setTimeout(() => {
+      aiRecognize();
+    }, 5000);
+  }
+  const aiRecognize = () => {
+    let recognition = new SpeechRecognition();
+    recognition.interimResults = true;
+    recognition.onstart = () => {
       setListening(true)
       console.log("listening...")
     }
-    recognition.onspeechend=(e)=>{
+    recognition.onspeechend = (e) => {
       recognition.stop();
       setListening(false)
       console.log("done recognizing")
     }
-    recognition.onerror=(e)=>{
-      console.log("error=",e.error)
+    recognition.onerror = (e) => {
+      console.log("error=", e.error)
       setListening(false)
     };
-    recognition.onresult=(e)=>{
-        var current=e.resultIndex;
-        var transcript=e.results[current][0].transcript;
-        if (e.results[0].isFinal) {
-          setAi(transcript)
-          if (transcript.toLowerCase().includes('yes')) {
-              articles.forEach((item)=>{
-                setThisCard(item.id)
-                aiSpeak(item.title);
-              })
-            }
-          if (transcript.toLowerCase().includes('no')) {
-                aiSpeak('okay,keep quit.');
-            }
+    recognition.onresult = (e) => {
+      var current = e.resultIndex;
+      var transcript = e.results[current][0].transcript;
+      if (e.results[0].isFinal) {
+        setAi(transcript)
+        if (transcript.toLowerCase().includes('yes')) {
+          articles.forEach((item) => {
+            aiSpeak(item.title);
+          })
+        }
+        if (transcript.toLowerCase().includes('no')) {
+          aiSpeak('okay,keep quit.');
         }
       }
+    }
     recognition.start();
   }
 
@@ -229,64 +226,64 @@ function App() {
         {isOffline && <Alert severity="warning">You are offline , check your internet connection !</Alert>}
         <Box className={classes.hero}>
           <Box>
-          <AppBar position="static" color="transparent" elevation={0} >
-          <Toolbar className={classes.appbar}>
-            <Typography className={classes.title} onClick={(e) => setAnchorEl(e.currentTarget)}>
-              {category}
-            </Typography>
-            <Menu
-              id="simple-menu"
-              anchorEl={anchorEl}
-              keepMounted
-              open={Boolean(anchorEl)}
-              onClose={() => setAnchorEl(null)}
-            >
-              <MenuItem onClick={() => {
-                setCategory("articles")
-                setAnchorEl(null)
-              }}>Articles</MenuItem>
-              <MenuItem onClick={() => {
-                setCategory("blogs")
-                setAnchorEl(null)
-              }}>Blogs</MenuItem>
-              <MenuItem onClick={() => {
-                setCategory("reports")
-                setAnchorEl(null)
-              }}>Reports</MenuItem>
-            </Menu>
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase
-                placeholder="Search…"
-                type="text"
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-              />
-            </div>
-            <Switch
-              checked={darkMode}
-              onChange={() => setDarkMode(!darkMode)}
-            />
-          </Toolbar>
-        </AppBar>
-        <Divider/>
+            <AppBar position="static" color="transparent" elevation={0} >
+              <Toolbar className={classes.appbar}>
+                <Typography className={classes.title} onClick={(e) => setAnchorEl(e.currentTarget)}>
+                  {category}
+                </Typography>
+                <Menu
+                  id="simple-menu"
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl)}
+                  onClose={() => setAnchorEl(null)}
+                >
+                  <MenuItem onClick={() => {
+                    setCategory("articles")
+                    setAnchorEl(null)
+                  }}>Articles</MenuItem>
+                  <MenuItem onClick={() => {
+                    setCategory("blogs")
+                    setAnchorEl(null)
+                  }}>Blogs</MenuItem>
+                  <MenuItem onClick={() => {
+                    setCategory("reports")
+                    setAnchorEl(null)
+                  }}>Reports</MenuItem>
+                </Menu>
+                <div className={classes.search}>
+                  <div className={classes.searchIcon}>
+                    <SearchIcon />
+                  </div>
+                  <InputBase
+                    placeholder="Search…"
+                    type="text"
+                    classes={{
+                      root: classes.inputRoot,
+                      input: classes.inputInput,
+                    }}
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
+                  />
+                </div>
+                <Switch
+                  checked={darkMode}
+                  onChange={() => setDarkMode(!darkMode)}
+                />
+              </Toolbar>
+            </AppBar>
+            <Divider />
           </Box>
           <Box id="headline" >
-           World in Headlines
-         </Box>
+            World in Headlines
+          </Box>
         </Box>
         <Container maxWidth="lg" className={classes.newsContainer}>
           <Typography variant="h4" className={classes.newsTitle}>
             Latest
           </Typography>
           <Grid container spacing={3}>
-            {articles.map((item) => {
+            {articles && articles.map((item) => {
               if (item.title.toLowerCase().includes(text.toLowerCase())) {
                 return (
                   <Grid item xs={12} sm={6} md={4} key={item.id}>
@@ -308,7 +305,7 @@ function App() {
                           </Typography>
                         </CardContent>
                       </CardActionArea>
-                      <CardActions className={classes.cardActions} style={{backgroundColor:(thisCard===item.id)&&"#3768ffde"}}>
+                      <CardActions className={classes.cardActions}>
                         <Typography variant="subtitle2" color="textSecondary" component="p">
                           {item.newsSite}
                         </Typography>
@@ -325,10 +322,10 @@ function App() {
             })}
           </Grid>
         </Container>
-        <Fab color="primary" variant="extended" aria-label="add" className={classes.fab} onClick={()=>handleAI()}>
+        <Fab color="primary" variant="extended" aria-label="add" className={classes.fab} onClick={() => handleAI()}>
           {ai}
-          {isListening?<Hearing/>:<Mic />}
-      </Fab>
+          {isListening ? <Hearing /> : <Mic />}
+        </Fab>
       </Paper>
     </ThemeProvider>
   );
