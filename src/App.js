@@ -172,11 +172,21 @@ function App() {
   }
 
   const handleAI = () => {
-    speakRobot("Hello reader ! would you like to read me all the headlines ?")
+    speakRobot("hey reader ! would you like to read me all the headlines ?")
     setTimeout(() => {
       aiRecognize();
     }, 5000);
   }
+
+  const yes = (str) => {
+    const conditions = ['yes', 'yeah', "sure", 'why not'];
+    return conditions.some(el => str.includes(el))
+  }
+  const no = (str) => {
+    const conditions = ['no', 'stop', 'shut up'];
+    return conditions.some(el => str.includes(el))
+  }
+
   const aiRecognize = () => {
     let recognition = new SpeechRecognition();
     recognition.interimResults = true;
@@ -198,16 +208,16 @@ function App() {
       var transcript = e.results[current][0].transcript;
       if (e.results[0].isFinal) {
         setAi(transcript)
-        if (transcript.toLowerCase().includes('yes' || 'yeah' || "sure" || 'why not')) {
+        if (yes(transcript.toLowerCase())) {
           articles.forEach((item) => {
             aiSpeak(item.title);
           })
         }
-        else if (transcript.toLowerCase().includes('no' || 'stop' || 'shut up')) {
+        else if (no(transcript.toLowerCase())) {
           aiSpeak('okay, no problem !');
         }
         else {
-          aiSpeak('Give me answer either yes or no !');
+          aiSpeak(`sorry! I can't understand, please tell my developer ashish badgujar !`);
         }
       }
     }
