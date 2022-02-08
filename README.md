@@ -2,6 +2,10 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## screenshots
+![Web capture_8-2-2022_10544_react-news-ashishbadgujar vercel app](https://user-images.githubusercontent.com/67192558/152919018-b3be8c85-1d6c-477a-87f1-01938142320a.jpeg)
+![Web capture_8-2-2022_1064_react-news-ashishbadgujar vercel app](https://user-images.githubusercontent.com/67192558/152919026-edd94413-9a72-4321-9e19-f8d198330ef3.jpeg)
+
 ## Available Scripts
 
 In the project directory, you can run:
